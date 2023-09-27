@@ -3,7 +3,8 @@ from tkinter import ttk
 from tkinter import messagebox
 
 import datetime
-import mod_arm as arm 
+import mod_elbow as elbow
+import mod_hands as hands
 import mysql.connector
 
 #NOTA: Para executar o código, é necessário instalar o pacote mysql-connector-python
@@ -14,8 +15,8 @@ registro_window = None
 
 acesso_mysql = {
     "host": "18.231.13.62",
-    "user": "root",
-    "password": "sateste",
+    "user": "projete",
+    "password": "D10m05@Daj",
     "database": "projete"
 }
 
@@ -97,7 +98,7 @@ def abrir_janela_registro():
     altura_tela = root.winfo_screenheight()
 
     largura_nova_janela = 400  
-    altura_nova_janela = 400   
+    altura_nova_janela = 430   
     
     x = (largura_tela - largura_nova_janela) // 2
     # y = (altura_tela - altura_nova_janela) // 2
@@ -204,16 +205,29 @@ def chamar_tela_exame():
             id_paciente = selected_data[0]
             nome_exame = combobox_exame.get()
 
-            print("Valor selecionado:", id_exame)
-            print(f"Chamando a tela de exame para o paciente ID: {selected_data[0]} - Data: {data_exame}")
+            print("Identificador do exame:", id_exame)
+            print(f"Exame para o paciente ID: {selected_data[0]} - Data: {data_exame}")
 
-            arm.main()
+            if id_exame == 2:
+                elbow.main()
+                laudo = ', '.join(map(str, elbow.angle_records))
+            elif id_exame == 3:
+                hands.main()
+                laudo = ', '.join(map(str, hands.angle_records))
+            else:
+                messagebox.showinfo("Informação", "Exame não implementado :(")
+                return
+            
+            # Se todos os elementos da lista são iguais a zero
+            # o exame não será gravado
+            verifica_lista = all(elemento == 0 for elemento in elbow.angle_records)
+            if verifica_lista and id_exame == 2:
+                messagebox.showinfo("Informação", "Exame não realizado.")
+                return
             
             # Grava resultado exame no banco de dados
             try:
                 conexao, cursor = conecta_mysql()
-
-                laudo = ', '.join(map(str, arm.angle_records))
 
                 cursor.execute("INSERT INTO exames (data, id_paciente, nome_do_exame, resultado) VALUES (%s, %s, %s, %s)", (data_exame, id_paciente, nome_exame, laudo))
                 conexao.commit()
@@ -249,7 +263,8 @@ def buscar_paciente():
 
         if not pacientes_encontrados:
             messagebox.showinfo("Informação", "Nenhum paciente foi encontrado com o critério de busca.")
-            exames_tree.delete(*exames_tree.get_children())
+            
+        exames_tree.delete(*exames_tree.get_children())
     
     except mysql.connector.Error as err:
         print(f"Erro MySQL: {err}")
@@ -406,7 +421,10 @@ def detalhes_exame():
             
     else:
         messagebox.showinfo("Informação", "Selecione um paciente e o exame que você desejada obter os detalhes.")
-        
+
+def detalhes_paciente():
+    messagebox.showinfo("Informação", "Função não implementada :(")
+    return
 
 # Criar a janela principal
 root = tk.Tk()
@@ -450,7 +468,7 @@ buscar_button = ttk.Button(frame_busca, text="Buscar", command=buscar_paciente)
 buscar_button.grid(row=0, column=2, padx=(0, 5))
 cadastrar_paciente_button = ttk.Button(frame_busca, text="+ Novo paciente", command=abrir_janela_registro)
 cadastrar_paciente_button.grid(row=0, column=3, padx=5, pady=10)
-chamar_paciente_button = ttk.Button(frame_busca, text="Detalhes paciente", command=detalhes_exame)
+chamar_paciente_button = ttk.Button(frame_busca, text="Detalhes paciente", command=detalhes_paciente)
 chamar_paciente_button.grid(row=0, column=4, padx=5, pady=10)
 apagar_paciente_button = ttk.Button(frame_busca, text="- Excluir paciente", command=apagar_paciente)
 apagar_paciente_button.grid(row=0, column=5, padx=50, pady=0)
