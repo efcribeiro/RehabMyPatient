@@ -1,10 +1,12 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-import time
 
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
+
+def get_angle_records():
+    return angle_records
 
 def calculate_angle(a, b, c):
     a = np.array(a)  # First
@@ -22,6 +24,7 @@ def calculate_angle(a, b, c):
     return int(angle)
 
 def main():
+    global angle_records
 
     cap = cv2.VideoCapture(0)
 
@@ -30,7 +33,7 @@ def main():
 
     angle_start, angle_end = 0, 0  
     angle_records = [0, 0, 0, 0]
-
+    
     # Imprime captura angulos inicio e fim.
     # True = Imprime valor no console.
     debug = False 
@@ -130,7 +133,7 @@ def main():
                     # Ao sair imprime no console a angulação no formato: 
                     #   [inicio-braco-direito, fim-braco-direito, inicio-braco-esquerdo, fim-braco-esquerdo]
                     #
-                    print(f"Angulacao: {angle_records}")
+                    # print(f"Angulacao: {angle_records}")
                     break
 
                 # Registra angulo inicial braco direito
@@ -321,10 +324,9 @@ def main():
 
             cv2.imshow("Mediapipe Feed", image)
 
-            #TODO: Implementar gravacao banco de dados
-
         cap.release()
         cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     main()
+    print(f"Angulacao: {angle_records}")
