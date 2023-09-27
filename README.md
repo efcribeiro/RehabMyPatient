@@ -22,3 +22,17 @@ Projeto RehabMyPatient - Turma 3410 - ETE 2023
 | Tecla | Descrição |
 | --- | --- |
 | q | Sair do módulo de captura do ReabhMyPacient. |
+
+# TODO:
+
+| | Tarefa                                       |
+|-|----------------------------------------------|
+| #1 | Desenvolver funcionalidade para adicionar novos tipos de exames ao sistema.          |
+| #2 | Criar a capacidade de visualizar informações detalhadas sobre um paciente específico. |
+| #3 | Permitir a edição e atualização dos dados de um paciente no sistema.                  |
+| #4 | Desenvolver a funcionalidade de imprimir os resultados de exames individuais.         |
+| #5 | Criar relatórios que mostram a evolução do tratamento de pacientes ao longo do tempo.   |
+| #6 | Adaptar o projeto para funcionar como uma aplicação web.                               |
+
+
+
