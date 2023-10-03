@@ -322,7 +322,7 @@ def main():
                 mp_drawing.DrawingSpec(color=(245, 66, 230), thickness=2, circle_radius=2),
             )
 
-            cv2.imshow("Mediapipe Feed", image)
+            cv2.imshow("Flexao e extencao de cotovelo", image)
 
         cap.release()
         cv2.destroyAllWindows()

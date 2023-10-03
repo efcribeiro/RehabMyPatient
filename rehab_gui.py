@@ -5,6 +5,7 @@ from tkinter import messagebox
 import datetime
 import mod_elbow as elbow
 import mod_hands as hands
+import mod_shoulder as shoulder
 import mysql.connector
 
 #NOTA: Para executar o código, é necessário instalar o pacote mysql-connector-python
@@ -208,21 +209,34 @@ def chamar_tela_exame():
             print("Identificador do exame:", id_exame)
             print(f"Exame para o paciente ID: {selected_data[0]} - Data: {data_exame}")
 
-            if id_exame == 2:
-                elbow.main()
+            '''
+            ---------------
+            Tipos de exames
+            ---------------
+            0 - Abdução e adução da mão
+            1 - Abdução e adução de ombro
+            2 - Flexão e extenção de cotovelo
+            3 - Flexão e extenção da mão
+            4 - Flexão e extenção de ombro
+            '''
+            
+            if id_exame == 1:
+                shoulder.main() # Abdução e adução de ombro
+                laudo = ', '.join(map(str, shoulder.angle_records))
+                e = shoulder.angle_records # Atribui lista para variavel
+            elif id_exame == 2:
+                elbow.main() # Flexão e extenção de cotovelo
                 laudo = ', '.join(map(str, elbow.angle_records))
-            elif id_exame == 3:
-                hands.main()
-                laudo = ', '.join(map(str, hands.angle_records))
+                e = elbow.angle_records # Atribui lista para variavel
             else:
-                messagebox.showinfo("Informação", "Exame não implementado :(")
+                messagebox.showinfo("Informação", f"Exame {nome_exame} não implementado :(")
                 return
             
             # Se todos os elementos da lista são iguais a zero
-            # o exame não será gravado
-            verifica_lista = all(elemento == 0 for elemento in elbow.angle_records)
-            if verifica_lista and id_exame == 2:
-                messagebox.showinfo("Informação", "Exame não realizado.")
+            # o exame não será gravado e será excibida uma mensagem para o usuário
+            verifica_lista = all(elemento == 0 for elemento in e)
+            if verifica_lista:
+                messagebox.showinfo("Informação", "Dado(s) não registrado(s). Exame não realizado! :(")
                 return
             
             # Grava resultado exame no banco de dados
