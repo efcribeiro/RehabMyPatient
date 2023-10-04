@@ -32,11 +32,11 @@ def main():
     count_d, count_e = False, False
 
     angle_start, angle_end = 0, 0  
-    angle_records = [0, 0, 0, 0]
+    angle_records = [0, 0, 0, 0, 0 ,0]
     
     # Imprime captura angulos inicio e fim.
     # True = Imprime valor no console.
-    debug = False 
+    debug = True 
 
     ## Setup mediapipe instance
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
@@ -131,7 +131,7 @@ def main():
                 if key == ord("q"):
                     #
                     # Ao sair imprime no console a angulação no formato: 
-                    #   [inicio-braco-direito, fim-braco-direito, inicio-braco-esquerdo, fim-braco-esquerdo]
+                    #   [inicio-braco-direito, fim-braco-direito, inicio-braco-esquerdo, fim-braco-esquerdo, rep-dir, rep-esq]
                     #
                     # print(f"Angulacao: {angle_records}")
                     break
@@ -167,15 +167,18 @@ def main():
                 # Habilita contador de repeticao braco direito e esquerdo (tecla d e e)
                 if key == ord("d"):
                     count_d, count_e = True, False
-                    counter_e = 0 # zera contador esquerdo
+                    #counter_e = 0 # zera contador esquerdo
+
                 elif key == ord("e"):
                     count_d, count_e = False, True
-                    counter_d = 0 # zera contador direito
+                    #counter_d = 0 # zera contador direito
 
                 # Desabilita contador de repeticoes
                 if key == 32:
                     count_d, count_e = False, False
                     counter_d, counter_e = 0, 0
+                    angle_records[4] = 0 
+                    angle_records[5] = 0
 
                 # Contador braco direito
                 if count_d:
@@ -184,6 +187,7 @@ def main():
                     if angle_d < 60 and stage_d == "down":
                         stage_d = "up"
                         counter_d += 1
+                        angle_records[4] = counter_d
                         print(f"Repeticao (DIR): {counter_d}")
 
                 # # Contador braco esquerdo
@@ -193,6 +197,7 @@ def main():
                     if angle_e < 60 and stage_e == "down":
                         stage_e = "up"
                         counter_e += 1
+                        angle_records[5] = counter_d
                         print(f"Repeticao (ESQ): {counter_e}")
             except:
                 pass
