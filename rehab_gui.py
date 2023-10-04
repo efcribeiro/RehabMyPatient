@@ -226,12 +226,13 @@ def chamar_tela_exame():
                 e = shoulder.angle_records # Atribui lista para variavel
             elif id_exame == 2:
                 elbow.main() # Flexão e extenção de cotovelo
+
                 laudo = ', '.join(map(str, elbow.angle_records))
                 e = elbow.angle_records # Atribui lista para variavel
             else:
                 messagebox.showinfo("Informação", f"Exame {nome_exame} não implementado :(")
                 return
-            
+
             # Se todos os elementos da lista são iguais a zero
             # o exame não será gravado e será excibida uma mensagem para o usuário
             verifica_lista = all(elemento == 0 for elemento in e)
@@ -418,12 +419,16 @@ def detalhes_exame():
                         f"Nome do exame: {valores[3]}\n"
                         f"\n"
                         f"---- Resultado ----\n"
-                        f"\n"
+                        f"\n"  
                         f"Ângulo inicial (DIR): {angulacao[0]}\n"
                         f"Ângulo final   (DIR): {angulacao[1].strip()}\n"
                         f"Ângulo inicial (ESQ): {angulacao[2].strip()}\n"
-                        f"Ângulo final   (ESQ): {angulacao[3].strip()}\n",
+                        f"Ângulo final   (ESQ): {angulacao[3].strip()}\n"
+                        f"\n"
+                        f"Repeticao (DIR): {angulacao[4]}\n"
+                        f"Repeticao (ESQ): {angulacao[5]}\n",
                         font=font_mono
+                       
                 )
                 detalhes_label.pack(padx=20, pady=20)
                 botao_fechar = tk.Button(detalhes_janela, text="Fechar", command=detalhes_janela.destroy)
